@@ -49,9 +49,17 @@ const SingleVaultPage: React.FC = () => {
 
       <hr />
 
-      <em>All data RAW, all data from onChain, all data requires metamask</em>
-      <em>Note: Update Periodically to be able to figure out APR over time</em>
-      <em>Data with a Dot is Formatted by token decimals</em>
+      <p>
+        <em>All data RAW, all data from onChain, all data requires metamask</em>
+      </p>
+      <p>
+        <em>
+          Note: Update Periodically to be able to figure out APR over time
+        </em>
+      </p>
+      <p>
+        <em>Data with a Dot is Formatted by token decimals</em>
+      </p>
     </div>
   );
 };
