@@ -58,7 +58,9 @@ const useVaultData = (
       const tempVaultData = [
         name,
         `Current Balance ${utils.formatUnits(balance, wantDecimals)}`,
-        `lastHarvestedAt ${lastHarvestedAt}`,
+        `lastHarvestedAt ${new Date(
+          lastHarvestedAt.toNumber() * 1000
+        ).toString()} || UNIX:  ${lastHarvestedAt}`,
         `lastHarvestAmount ${utils.formatUnits(
           lastHarvestAmount,
           wantDecimals
