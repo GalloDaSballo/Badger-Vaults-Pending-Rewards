@@ -6,6 +6,7 @@ const VAULT_ABI = [
   // Accounts
   "function strategy() external view returns (address)",
   "function name() external view returns (string)",
+  "function token() external view returns (address)",
 
   // Harvest info stuff
   "function balance() external view returns (uint256)",
@@ -18,6 +19,8 @@ const STRAT_ABI = [
   // Rewards
   "function balanceOfRewards() external view override returns (tuple(address token, uint256 amount)[]  rewards)",
 ];
+
+const TOKEN_ABI = ["function decimals() external view returns (uint256)"];
 
 const useVaultData = (
   user: User,
@@ -36,32 +39,52 @@ const useVaultData = (
       const { provider } = user;
 
       const vaultContract = new Contract(address, VAULT_ABI, provider);
-      console.log("vaultContract", vaultContract);
       const strat = await vaultContract.strategy();
-      console.log("strat", strat);
       setStrategy(strat);
 
+      // Get Basic Vault Data
       const name = await vaultContract.name();
       const balance: BigNumber = await vaultContract.balance();
+
+      // Get Want Decimals
+      const token = await vaultContract.token();
+      const tokenContract = new Contract(token, TOKEN_ABI, provider);
+      const wantDecimals = await tokenContract.decimals();
+
+      // Get harvest data
       const assetsAtLastHarvest: BigNumber = await vaultContract.assetsAtLastHarvest();
       const lastHarvestAmount: BigNumber = await vaultContract.lastHarvestAmount();
       const lastHarvestedAt: BigNumber = await vaultContract.lastHarvestedAt();
       const tempVaultData = [
         name,
-        `Current Balance ${balance}`,
+        `Current Balance ${utils.formatUnits(balance, wantDecimals)}`,
         `lastHarvestedAt ${lastHarvestedAt}`,
-        `lastHarvestAmount ${lastHarvestAmount}`,
-        `assetsAtLastHarvest ${assetsAtLastHarvest}`,
+        `lastHarvestAmount ${utils.formatUnits(
+          lastHarvestAmount,
+          wantDecimals
+        )}`,
+        `assetsAtLastHarvest ${utils.formatUnits(
+          assetsAtLastHarvest,
+          wantDecimals
+        )}`,
       ];
       setVaultData(tempVaultData);
 
       const stratContract = new Contract(strat, STRAT_ABI, provider);
-      const res = await stratContract.balanceOfRewards();
+      let res = await stratContract.balanceOfRewards();
+
+      res = await Promise.all(
+        res.map(async ([addy, amount]) => {
+          const tC = new Contract(addy, TOKEN_ABI, provider);
+          const decimals = await tC.decimals();
+
+          return [addy, utils.formatUnits(amount, decimals)];
+        })
+      );
+
       setRewards(res);
       setError(false);
-      console.log("res", res);
     } catch (err) {
-      console.log("Exception");
       setStrategy(null);
       setRewards([]);
       setVaultData([]);
