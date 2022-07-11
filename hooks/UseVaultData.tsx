@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Contract, BigNumber } from "ethers";
+import { Contract, BigNumber, utils } from "ethers";
 import { User } from "../context/UserContext";
 
 const VAULT_ABI = [
@@ -42,10 +42,10 @@ const useVaultData = (
       setStrategy(strat);
 
       const name = await vaultContract.name();
-      const balance = await vaultContract.balance();
-      const assetsAtLastHarvest = await vaultContract.assetsAtLastHarvest();
-      const lastHarvestAmount = await vaultContract.lastHarvestAmount();
-      const lastHarvestedAt = await vaultContract.lastHarvestedAt();
+      const balance: BigNumber = await vaultContract.balance();
+      const assetsAtLastHarvest: BigNumber = await vaultContract.assetsAtLastHarvest();
+      const lastHarvestAmount: BigNumber = await vaultContract.lastHarvestAmount();
+      const lastHarvestedAt: BigNumber = await vaultContract.lastHarvestedAt();
       const tempVaultData = [
         name,
         `Current Balance ${balance}`,

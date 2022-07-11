@@ -1,6 +1,7 @@
 import { useRouter } from "next/dist/client/router";
 import { useUser } from "../context/UserContext";
 import useVaultData from "../hooks/UseVaultData";
+import styles from "../styles/SingleVaultPage.module.css";
 
 const SingleVaultPage: React.FC = () => {
   const router = useRouter();
@@ -18,21 +19,21 @@ const SingleVaultPage: React.FC = () => {
   }
 
   return (
-    <div>
-      <h1>Single Vault</h1>
+    <div className={styles.main}>
+      <h1>Vault Info</h1>
       <h1>ChainId: {chainId}</h1>
       <h1>Vault: {address}</h1>
       <button onClick={refresher}>Reload</button>
       {error && <p>Something went wrong, try again</p>}
       {vaultData?.length > 0 && (
-        <section>
+        <section className={styles.container}>
           {vaultData.map((data) => (
             <p>{data}</p>
           ))}
         </section>
       )}
       {strategyAddress && (
-        <div>
+        <div className={styles.container}>
           <h2>Found Data for Strategy {strategyAddress}</h2>
           <h3>Raw Pending Rewards Data</h3>
           <p>

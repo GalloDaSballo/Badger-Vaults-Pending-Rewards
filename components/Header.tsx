@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { useLogin, useUser } from "../context/UserContext";
 
 const Header: React.FC = () => {
@@ -11,6 +12,9 @@ const Header: React.FC = () => {
           Login with Metamask
         </button>
       )}
+      <Link href="/">
+        <a>Home</a>
+      </Link>
     </header>
   );
 };
