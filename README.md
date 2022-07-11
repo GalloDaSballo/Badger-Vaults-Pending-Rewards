@@ -6,6 +6,16 @@ Dapp for checking Vault Statistics:
 
 Allows monitoring statistics by the second for completely transparent APY math
 
+## Documentation / User Manual
+
+https://mint-salesman-909.notion.site/Badger-Pending-Rewards-Estimator-896e4f06e05e41c2818cf2a6badb8a58
+
+
+## Website
+
+https://badger-vaults-pending-rewards.vercel.app/
+
+### Rest
 ----
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
