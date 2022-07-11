@@ -21,7 +21,7 @@ const SingleVaultPage: React.FC = () => {
     <div>
       <h1>Single Vault</h1>
       <h1>ChainId: {chainId}</h1>
-      <h1>Address: {address}</h1>
+      <h1>Vault: {address}</h1>
       <button onClick={refresher}>Reload</button>
       {strategyAddress && (
         <div>

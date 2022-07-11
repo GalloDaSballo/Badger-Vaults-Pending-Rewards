@@ -10,12 +10,11 @@ const Home: React.FC = () => {
       </Head>
 
       <main className={styles.main}>
-        <h1>Step 2: Add a Vault Address to Visualize Vault Info</h1>
-
-        <p>
-          Ideally we can build the query for you here, or you know, just create
-          the url
-        </p>
+        <h1>
+          Step 1: Unlock Metamask (Data is directly from your RPC, no
+          intermediaries)
+        </h1>
+        <h1>Step 2: Add the address of the vault to the url</h1>
       </main>
     </div>
   );
