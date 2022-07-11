@@ -1,13 +1,13 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import { ethers, providers } from "ethers";
 import { useWeb3React } from "@web3-react/core";
-import useEagerConnect from "../hooks/useEagerConnect";
+import useEagerConnect from "../hooks/UseEagerConnect";
 import { injected } from "../utils/connectors";
 
 export interface User {
   address: string;
   provider: ethers.providers.Web3Provider;
-  chainId: string;
+  chainId: number;
 }
 
 type UserContextData = {

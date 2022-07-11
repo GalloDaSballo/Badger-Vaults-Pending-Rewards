@@ -5,6 +5,8 @@ import { User } from "../context/UserContext";
 const VAULT_ABI = [
   // Accounts
   "function strategy() external view returns (address)",
+
+  // Harvest info stuff
 ];
 
 const STRAT_ABI = [
