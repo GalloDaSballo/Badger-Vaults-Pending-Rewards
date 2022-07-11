@@ -5,8 +5,13 @@ import { User } from "../context/UserContext";
 const VAULT_ABI = [
   // Accounts
   "function strategy() external view returns (address)",
+  "function name() external view returns (string)",
 
   // Harvest info stuff
+  "function balance() external view returns (uint256)",
+  "function assetsAtLastHarvest() external view returns (uint256)",
+  "function lastHarvestAmount() external view returns (uint256)",
+  "function lastHarvestedAt() external view returns (uint256)",
 ];
 
 const STRAT_ABI = [
@@ -17,9 +22,11 @@ const STRAT_ABI = [
 const useVaultData = (
   user: User,
   address: string
-): [string | null, any[], () => Promise<void>] => {
+): [boolean, string | null, any[], any[], () => Promise<void>] => {
+  const [error, setError] = useState<boolean>(false);
   const [strategy, setStrategy] = useState<string | null>(null);
   const [rewards, setRewards] = useState<any[]>([]);
+  const [vaultData, setVaultData] = useState<any[]>([]);
 
   const fetchVaultData = useCallback(async () => {
     if (!user) {
@@ -34,14 +41,31 @@ const useVaultData = (
       console.log("strat", strat);
       setStrategy(strat);
 
+      const name = await vaultContract.name();
+      const balance = await vaultContract.balance();
+      const assetsAtLastHarvest = await vaultContract.assetsAtLastHarvest();
+      const lastHarvestAmount = await vaultContract.lastHarvestAmount();
+      const lastHarvestedAt = await vaultContract.lastHarvestedAt();
+      const tempVaultData = [
+        name,
+        `Current Balance ${balance}`,
+        `lastHarvestedAt ${lastHarvestedAt}`,
+        `lastHarvestAmount ${lastHarvestAmount}`,
+        `assetsAtLastHarvest ${assetsAtLastHarvest}`,
+      ];
+      setVaultData(tempVaultData);
+
       const stratContract = new Contract(strat, STRAT_ABI, provider);
       const res = await stratContract.balanceOfRewards();
       setRewards(res);
+      setError(false);
       console.log("res", res);
     } catch (err) {
       console.log("Exception");
       setStrategy(null);
       setRewards([]);
+      setVaultData([]);
+      setError(true);
     }
   }, [user, address]);
 
@@ -49,7 +73,7 @@ const useVaultData = (
     fetchVaultData();
   }, [fetchVaultData]);
 
-  return [strategy, rewards, fetchVaultData];
+  return [error, strategy, rewards, vaultData, fetchVaultData];
 };
 
 export default useVaultData;

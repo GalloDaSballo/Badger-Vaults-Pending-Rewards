@@ -8,7 +8,7 @@ const SingleVaultPage: React.FC = () => {
   const user = useUser();
   const chainId = user?.chainId;
 
-  const [strategyAddress, rewards, refresher] = useVaultData(
+  const [error, strategyAddress, rewards, vaultData, refresher] = useVaultData(
     user,
     address as string
   );
@@ -23,9 +23,21 @@ const SingleVaultPage: React.FC = () => {
       <h1>ChainId: {chainId}</h1>
       <h1>Vault: {address}</h1>
       <button onClick={refresher}>Reload</button>
+      {error && <p>Something went wrong, try again</p>}
+      {vaultData?.length > 0 && (
+        <section>
+          {vaultData.map((data) => (
+            <p>{data}</p>
+          ))}
+        </section>
+      )}
       {strategyAddress && (
         <div>
           <h2>Found Data for Strategy {strategyAddress}</h2>
+          <h3>Raw Pending Rewards Data</h3>
+          <p>
+            <i>These are rewards the strategy will claim at next harvest</i>
+          </p>
           {rewards.map((r) => (
             <div>
               <b>{r[0]}</b>: {String(r[1])}
